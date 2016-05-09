@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-#import re
 import os
 import argparse
 import string
@@ -16,17 +14,17 @@ def record(args):
 
 
 def validate(args):
-    from urllib2 import urlopen
+    from six.moves.urllib.request import urlopen
 
-    json_data = urlopen(args.json_source).read()
+    json_data = Recorder.open_with_basic_auth(args.json_source, args.auth).read()
     validator = Validator.from_path(args.json_schema_file_path)
     is_valid = validator.assert_json(json_data)
 
     if is_valid:
-        print " * JSON is valid"
+        print(" * JSON is valid")
     else:
-        print " ! JSON is broken "
-        print validator.error_message
+        print(" ! JSON is broken ")
+        print(validator.error_message)
 
 
 def homologate(args):
